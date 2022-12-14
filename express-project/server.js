@@ -19,6 +19,14 @@ const friends = [
   }
 ]
 
+//when writing middleware, always make sure call the next(), otherwise, the data would not pass to other functions
+app.use((req,res,next) => {
+  const start = Date.now();
+  next();
+  const endTime = Date.now() - start;
+  console.log(`${req.method}, ${req.url}, ${endTime}s`);
+});
+
 app.get('/', (req, res) => {
   res.send("Hey!")
 });
