@@ -1,23 +1,12 @@
 import express from "express";
+import friendsRouter from './routes/friends.router.js';
+import messagesRouter from './routes/messages.router.js';
+
 
 const app = express();
-
+const router = express.Router();
 const PORT = 3000;
 
-const friends = [
-  {
-    id: 0,
-    name: "Armin"
-  },
-  {
-    id: 1,
-    name: "Morty"
-  },
-  {
-    id: 2,
-    name: "Arman"
-  }
-]
 
 //when writing middleware, always make sure call the next(), otherwise, the data would not pass to other functions
 app.use((req,res,next) => {
@@ -28,44 +17,9 @@ app.use((req,res,next) => {
 });
 
 app.use(express.json());
+app.use('/friends', friendsRouter);
+app.use('/messages', messagesRouter);
 
-app.post('/friends', (req,res) => {
-  if(!req.body.name) {
-    return res.status(400).json({
-      error: "Missing friend name"
-    })
-  }
-  const newFriend = {
-    id: friends.length,
-    name: req.body.name
-  }
-  friends.push(newFriend);
-  res.json(newFriend);
-})
-
-app.get('/', (req, res) => {
-  res.send("Hey!")
-});
-
-app.get('/friends', (req, res) => {
-  res.json(friends);
-});
-
-app.get('/friends/:friendId', (req, res) => {
-  const friendId = Number(req.params.friendId);
-  const friend = friends[friendId];
-  if (friend) {
-    res.json(friend);
-  } else {
-    res.status(404).json({
-      error: "Friend doesn't exist"
-    })
-  }
-});
-
-app.post('/messages', (req, res) => {
-  console.log("Updating messages...")
-});
 
 app.listen(PORT, () => {
   console.log(`Listening on ${PORT}...`)
