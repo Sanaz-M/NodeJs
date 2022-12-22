@@ -6,19 +6,28 @@ import { fileURLToPath } from 'url';
 
 
 const app = express();
+app.set("view engine", "hbs");
+app.set('views', join(dirname(fileURLToPath(import.meta.url)), "src/views"));
 const router = express.Router();
 const PORT = 3000;
 
 
 //when writing middleware, always make sure call the next(), otherwise, the data would not pass to other functions
-app.use((req,res,next) => {
+app.use((req, res, next) => {
   const start = Date.now();
   next();
   const endTime = Date.now() - start;
   console.log(`${req.method}, ${req.url}, ${endTime}s`);
 });
 
-app.use('/site', express.static(join(dirname(fileURLToPath(import.meta.url)) , "public")));
+app.get('/', (req, res) => {
+  res.render('index', {
+    title: "NodeJs Test",
+    caption: "Coimbra is so Beautiful!",
+  })
+});
+
+app.use('/site', express.static(join(dirname(fileURLToPath(import.meta.url)), "public")));
 app.use(express.json());
 app.use('/friends', friendsRouter);
 app.use('/messages', messagesRouter);
