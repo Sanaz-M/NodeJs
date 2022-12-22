@@ -1,6 +1,8 @@
 import express from "express";
-import friendsRouter from './routes/friends.router.js';
-import messagesRouter from './routes/messages.router.js';
+import friendsRouter from './src/routes/friends.router.js';
+import messagesRouter from './src/routes/messages.router.js';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 
 
 const app = express();
@@ -16,6 +18,7 @@ app.use((req,res,next) => {
   console.log(`${req.method}, ${req.url}, ${endTime}s`);
 });
 
+app.use('/site', express.static(join(dirname(fileURLToPath(import.meta.url)) , "public")));
 app.use(express.json());
 app.use('/friends', friendsRouter);
 app.use('/messages', messagesRouter);
