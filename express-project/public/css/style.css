@@ -1,0 +1,11 @@
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+img {
+  border: 5px solid black;
+  border-radius: 10px;
+}
